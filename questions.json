@@ -1,27 +1,38 @@
 {
-  "Electric Circuits 1": {
-    "Ohm's Law": [
-      {
-        "question": "If $V = 10V$ and $R = 2\\Omega$, what is $I$?",
-        "answer": "$5A$",
-        "solution": "$I = \\frac{V}{R}$"
-      }
-    ],
-    "KVL & KCL": [
-      {
-        "question": "Find the sum of currents entering a node.",
-        "answer": "Zero",
-        "solution": "By KCL: $\\sum I_{in} = \\sum I_{out}$"
-      }
-    ]
-  },
-  "Mathematics": {
-    "Integrals": [
-      {
-        "question": "Solve $\\int \\cos(x) dx$",
-        "answer": "$\\sin(x) + C$",
-        "solution": "The derivative of $\\sin(x)$ is $\\cos(x)$."
-      }
-    ]
-  }
+    "Electrical Circuits 1": {
+        "Ohm's Law": [
+            {
+                "question": "If $V = 10V$ and $R = 2\\Omega$, what is $I$?",
+                "answer": "$5A$",
+                "solution": "$I = \\frac{V}{R}$"
+            }
+        ],
+        "KVL & KCL": [
+            {
+                "question": "Find the sum of currents entering a node.",
+                "answer": "Zero",
+                "solution": "By KCL: $\\sum I_{in} = \\sum I_{out}$"
+            }
+        ]
+    },
+    "Mathematics": {
+        "Integrals": [
+            {
+                "question": "Solve $\\int \\cos(x) dx$",
+                "answer": "$\\sin(x) + C$",
+                "solution": "The derivative of $\\sin(x)$ is $\\cos(x)$.",
+                "image": null
+            }
+        ]
+    },
+    "Electrical Circuits 1": {
+        "Inductance & Electromagnetic Induction": [
+            {
+                "question": "A 1,300-turn toroid has a cast-iron core whose average length and area are 22 in. and 0.75 in^{2}., respectively. If the current variation causes the permiability to vary between 230 and 600, calculate the inductance range of the toroid.",
+                "answer": "0.465 to 1.21 henry's",
+                "solution": "",
+                "image": null
+            }
+        ]
+    }
 }

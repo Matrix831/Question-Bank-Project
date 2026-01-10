@@ -90,11 +90,3 @@ To batch import questions from textbooks, use a `.csv` file with the following h
 ---
 
 *Developed for the love of Engineering and Open Source.*
-
----
-
-### How to use this in VS Code:
-1.  Open your project in **VS Code**.
-2.  Create a new file named `README.md` in the root folder.
-3.  Paste the text above into the file.
-4.  **Pro Tip:** Press `Ctrl + Shift + V` in VS Code to see a **Preview** of how it will look on GitHub before you upload it!

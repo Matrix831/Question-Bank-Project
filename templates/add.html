@@ -22,10 +22,11 @@
             --accent: #58a6ff;
             --text: #c9d1d9;
             --success: #238636;
+            --border: #30363d;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             margin: 0;
@@ -41,17 +42,18 @@
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            border: 1px solid #30363d;
+            border: 1px solid var(--border);
         }
 
-        h2 { border-bottom: 1px solid #30363d; padding-bottom: 10px; color: var(--accent); font-weight: 300; }
+        h2 { border-bottom: 1px solid var(--border); padding-bottom: 10px; color: var(--accent); font-weight: 300; }
+        h3 { color: var(--accent); font-weight: 300; margin-top: 40px; border-top: 1px solid var(--border); pt: 20px; }
 
         .toolbar {
             background: #0d1117;
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
-            border: 1px solid #30363d;
+            border: 1px solid var(--border);
         }
 
         .toolbar-group { margin-bottom: 15px; }
@@ -60,7 +62,7 @@
         .t-btn {
             background: #21262d;
             color: var(--text);
-            border: 1px solid #30363d;
+            border: 1px solid var(--border);
             padding: 6px 10px;
             margin: 2px;
             cursor: pointer;
@@ -76,23 +78,25 @@
             padding: 12px;
             margin-bottom: 15px;
             background: #0d1117;
-            border: 1px solid #30363d;
+            border: 1px solid var(--border);
             border-radius: 6px;
             color: white;
             box-sizing: border-box;
             font-size: 14px;
         }
 
+        input[type="file"] { background: transparent; border: 1px dashed var(--border); padding: 20px; text-align: center; cursor: pointer; }
+
         textarea:focus { border-color: var(--accent); outline: none; }
 
-        /* Preview Box */
         .preview-box {
             background: #050505;
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
-            border: 1px dashed #30363d;
+            border: 1px dashed var(--border);
             min-height: 50px;
+            overflow-x: auto;
         }
 
         .save-btn {
@@ -105,9 +109,12 @@
             font-weight: bold;
             cursor: pointer;
             font-size: 16px;
+            transition: 0.3s;
         }
 
-        .save-btn:hover { opacity: 0.9; }
+        .import-btn { background: #007bff; }
+
+        .save-btn:hover { filter: brightness(1.2); }
 
         .row { display: flex; gap: 15px; }
         .row input { flex: 1; }
@@ -120,61 +127,83 @@
     
     <div class="toolbar">
         <div class="toolbar-group">
-            <span class="group-label">Basic & Calculus</span>
-            <button class="t-btn" onclick="ins('\\frac{}{}')">Fraction</button>
-            <button class="t-btn" onclick="ins('^{}')">Exponent</button>
-            <button class="t-btn" onclick="ins('_{}')">Subscript</button>
+            <span class="group-label">Math & Calculus</span>
+            <button class="t-btn" onclick="ins('\\frac{}{}')">Frac</button>
+            <button class="t-btn" onclick="ins('^{}')">Exp</button>
+            <button class="t-btn" onclick="ins('_{}')">Sub</button>
             <button class="t-btn" onclick="ins('\\sqrt{}')">Root</button>
-            <button class="t-btn" onclick="ins('\\int_{}^{}')">Integral</button>
+            <button class="t-btn" onclick="ins('\\int_{}^{}')">∫</button>
             <button class="t-btn" onclick="ins('\\frac{d}{dx}')">d/dx</button>
-            <button class="t-btn" onclick="ins('\\sum_{}^{}')">Summation</button>
+            <button class="t-btn" onclick="ins('\\sum_{}^{}')">Σ</button>
             <button class="t-btn" onclick="ins('\\infty')">∞</button>
+            <button class="t-btn" onclick="ins('\\cdot')">·</button>
+            <button class="t-btn" onclick="ins('\\times')">×</button>
         </div>
 
         <div class="toolbar-group">
-            <span class="group-label">EE Specific & Phasors</span>
+            <span class="group-label">Electrical & Phasors</span>
             <button class="t-btn" onclick="ins('\\angle')">∠ (Phasor)</button>
-            <button class="t-btn" onclick="ins('^\\circ')">° (Degree)</button>
+            <button class="t-btn" onclick="ins('^\\circ')">° (Deg)</button>
             <button class="t-btn" onclick="ins('\\mathcal{L}\\{ \\}')">Laplace</button>
             <button class="t-btn" onclick="ins('\\Omega')">Ω (Ohm)</button>
             <button class="t-btn" onclick="ins('\\mu')">μ (Micro)</button>
             <button class="t-btn" onclick="ins('\\parallel')">|| (Parallel)</button>
-            <button class="t-btn" onclick="ins('\\text{Re}')">Real Part</button>
-            <button class="t-btn" onclick="ins('\\text{Im}')">Imag Part</button>
-            <button class="t-btn" onclick="ins('\\pi')">π</button>
+            <button class="t-btn" onclick="ins('\\approx')">≈</button>
+            <button class="t-btn" onclick="ins('\\nabla')">∇</button>
         </div>
 
         <div class="toolbar-group">
-            <span class="group-label">Greek Letters</span>
-            <button class="t-btn" onclick="ins('\\tau')">τ</button>
-            <button class="t-btn" onclick="ins('\\theta')">θ</button>
-            <button class="t-btn" onclick="ins('\\phi')">φ</button>
-            <button class="t-btn" onclick="ins('\\omega')">ω</button>
-            <button class="t-btn" onclick="ins('\\Delta')">Δ</button>
+            <span class="group-label">Full Greek Palette</span>
             <button class="t-btn" onclick="ins('\\alpha')">α</button>
             <button class="t-btn" onclick="ins('\\beta')">β</button>
             <button class="t-btn" onclick="ins('\\gamma')">γ</button>
+            <button class="t-btn" onclick="ins('\\Delta')">Δ</button>
+            <button class="t-btn" onclick="ins('\\epsilon')">ε</button>
+            <button class="t-btn" onclick="ins('\\zeta')">ζ</button>
+            <button class="t-btn" onclick="ins('\\eta')">η</button>
+            <button class="t-btn" onclick="ins('\\theta')">θ</button>
+            <button class="t-btn" onclick="ins('\\lambda')">λ</button>
+            <button class="t-btn" onclick="ins('\\pi')">π</button>
+            <button class="t-btn" onclick="ins('\\rho')">ρ</button>
+            <button class="t-btn" onclick="ins('\\sigma')">σ</button>
+            <button class="t-btn" onclick="ins('\\tau')">τ</button>
+            <button class="t-btn" onclick="ins('\\phi')">φ</button>
+            <button class="t-btn" onclick="ins('\\psi')">ψ</button>
+            <button class="t-btn" onclick="ins('\\omega')">ω</button>
         </div>
     </div>
 
-    <form action="/save" method="post">
+    <form action="/save" method="post" enctype="multipart/form-data">
         <div class="row">
-            <input type="text" name="subject" placeholder="Subject (e.g., Electric Circuits 1)" required>
-            <input type="text" name="subtopic" placeholder="Subtopic (e.g., Phasor Analysis)" required>
+            <input type="text" name="subject" placeholder="Subject (e.g., Siskind Circuits)" required>
+            <input type="text" name="subtopic" placeholder="Subtopic (e.g., Chapter 2: DC Motors)" required>
         </div>
 
-        <textarea id="editor" name="question" rows="4" placeholder="Type your question... Use $ for math symbols." oninput="updatePreview()"></textarea>
+        <textarea id="editor" name="question" rows="4" placeholder="Type your question content..." oninput="updatePreview()"></textarea>
         
-        <div class="group-label">Question Preview:</div>
-        <div id="preview" class="preview-box">Preview will appear here...</div>
+        <div class="group-label">Question Live Preview:</div>
+        <div id="preview" class="preview-box">Real-time rendering will appear here...</div>
 
-        <input type="text" name="answer" placeholder="Final Answer (e.g., $10\angle 30^\circ$ V)" required>
-        <textarea name="solution" rows="3" placeholder="Explain the steps..."></textarea>
+        <div class="group-label">Upload Circuit Diagram / Image:</div>
+        <input type="file" name="image" accept="image/*">
 
-        <button type="submit" class="save-btn">SAVE TO BANK</button>
+        <input type="text" name="answer" placeholder="Final Answer (e.g., $120\angle 0^\circ$ V)" required>
+        <textarea name="solution" rows="3" placeholder="Explain the calculation steps..."></textarea>
+
+        <button type="submit" class="save-btn">SAVE INDIVIDUAL QUESTION</button>
+    </form>
+
+    <h3>Batch Import Questions (CSV)</h3>
+    <p style="font-size: 13px; color: #8b949e; margin-bottom: 20px;">
+        Use this to import hundreds of questions from your Siskind textbook. 
+        Ensure your CSV has these headers: <b>subject, subtopic, question, answer, solution</b>.
+    </p>
+    <form action="/import_csv" method="post" enctype="multipart/form-data">
+        <input type="file" name="csv_file" accept=".csv" required>
+        <button type="submit" class="save-btn import-btn">IMPORT FROM CSV FILE</button>
     </form>
     
-    <p style="text-align: center;"><a href="/" style="color: #666; font-size: 13px; text-decoration: none;">← Return to Portal</a></p>
+    <p style="text-align: center; margin-top: 30px;"><a href="/" style="color: #666; font-size: 13px; text-decoration: none;">← Return to Portal</a></p>
 </div>
 
 <script>

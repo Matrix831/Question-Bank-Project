@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Question Bank</title>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$']], processEscapes: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --accent: #58a6ff;
+            --text: #c9d1d9;
+            --danger: #da3633;
+            --border: #30363d;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 40px; }
+        .container { max-width: 1200px; margin: auto; }
+        
+        h2 { color: var(--accent); font-weight: 300; }
+        
+        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
+        #search { padding: 10px; width: 300px; background: var(--card); border: 1px solid var(--border); color: white; border-radius: 6px; }
+
+        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background: #21262d; color: var(--accent); font-size: 12px; text-transform: uppercase; }
+        
+        .q-cell { max-width: 400px; font-size: 14px; }
+        .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
+        
+        .action-btns { display: flex; gap: 10px; }
+        .btn { padding: 6px 12px; border-radius: 4px; border: none; cursor: pointer; text-decoration: none; font-size: 13px; color: white; transition: 0.2s; }
+        .btn-edit { background: #238636; }
+        .btn-delete { background: var(--danger); }
+        .btn:hover { opacity: 0.8; }
+
+        .no-results { padding: 20px; text-align: center; color: #8b949e; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="controls">
+        <h2>Question Inventory</h2>
+        <input type="text" id="search" placeholder="Search questions or topics..." onkeyup="filterTable()">
+    </div>
+
+    <table id="q-table">
+        <thead>
+            <tr>
+                <th>Subject & Topic</th>
+                <th>Image</th>
+                <th>Question Content</th>
+                <th>Answer</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject, topics in data.items() %}
+                {% for topic, questions in topics.items() %}
+                    {% for q in questions %}
+                    <tr>
+                        <td>
+                            <small style="color: var(--accent);">{{ subject }}</small><br>
+                            <b>{{ topic }}</b>
+                        </td>
+                        <td>
+                            {% if q.image %}
+                                <img src="/static/uploads/{{ q.image }}" class="img-preview">
+                            {% else %}
+                                <span style="color: #444;">No Img</span>
+                            {% endif %}
+                        </td>
+                        <td class="q-cell">{{ q.question }}</td>
+                        <td>{{ q.answer }}</td>
+                        <td class="action-btns">
+                            <a href="{{ url_for('edit_question', subject=subject, subtopic=topic, index=loop.index0) }}" class="btn btn-edit">Edit</a>
+                            
+                            <form action="{{ url_for('delete_question', subject=subject, subtopic=topic, index=loop.index0) }}" method="POST" onsubmit="return confirm('Delete this question permanently?')">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <p style="margin-top: 20px;"><a href="/" style="color: #666; text-decoration: none;">← Back to Portal</a></p>
+</div>
+
+<script>
+    function filterTable() {
+        let input = document.getElementById("search").value.toLowerCase();
+        let rows = document.querySelectorAll("#q-table tbody tr");
+        
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(input) ? "" : "none";
+        });
+    }
+</script>
+
+</body>
+</html>

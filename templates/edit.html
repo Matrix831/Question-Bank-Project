@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Question | Engineering Portal</title>
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$']], processEscapes: true }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --accent: #58a6ff;
+            --text: #c9d1d9;
+            --success: #238636;
+            --border: #30363d;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); padding: 40px 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 900px; background: var(--card); padding: 30px; border-radius: 12px; border: 1px solid var(--border); }
+        
+        h2 { border-bottom: 1px solid var(--border); padding-bottom: 10px; color: var(--accent); font-weight: 300; }
+        .toolbar { background: #0d1117; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .t-btn { background: #21262d; color: var(--text); border: 1px solid var(--border); padding: 6px 10px; margin: 2px; cursor: pointer; border-radius: 6px; font-size: 13px; }
+        .t-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: #0d1117; border: 1px solid var(--border); border-radius: 6px; color: white; box-sizing: border-box; }
+        .preview-box { background: #050505; padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px dashed var(--border); min-height: 50px; }
+        
+        .save-btn { background: var(--success); color: white; padding: 15px; border: none; width: 100%; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .meta-info { font-size: 12px; color: #8b949e; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Edit Question</h2>
+    <div class="meta-info">
+        Editing: <b>{{ sub }}</b> > <b>{{ topic }}</b> (Index: {{ idx }})
+    </div>
+
+    <div class="toolbar">
+        <button class="t-btn" onclick="ins('\\frac{}{}')">Frac</button>
+        <button class="t-btn" onclick="ins('^{}')">Exp</button>
+        <button class="t-btn" onclick="ins('\\Omega')">Ω</button>
+        <button class="t-btn" onclick="ins('\\angle')">∠</button>
+        <button class="t-btn" onclick="ins('\\tau')">τ</button>
+        <button class="t-btn" onclick="ins('\\int')">∫</button>
+    </div>
+
+    <form action="{{ url_for('edit_question', subject=sub, subtopic=topic, index=idx) }}" method="post">
+        
+        <label>Question:</label>
+        <textarea id="editor" name="question" rows="5" oninput="updatePreview()">{{ q.question }}</textarea>
+        
+        <div id="preview" class="preview-box"></div>
+
+        <label>Final Answer:</label>
+        <input type="text" name="answer" value="{{ q.answer }}" required>
+
+        <label>Solution Steps:</label>
+        <textarea name="solution" rows="4">{{ q.solution }}</textarea>
+
+        <button type="submit" class="save-btn">UPDATE QUESTION</button>
+    </form>
+    
+    <p style="text-align: center;"><a href="/manage" style="color: #666; text-decoration: none;">Discard Changes & Return</a></p>
+</div>
+
+<script>
+    const editor = document.getElementById('editor');
+    const preview = document.getElementById('preview');
+
+    function ins(code) {
+        const start = editor.selectionStart;
+        editor.value = editor.value.substring(0, start) + code + editor.value.substring(editor.selectionEnd);
+        editor.focus();
+        updatePreview();
+    }
+
+    function updatePreview() {
+        preview.innerHTML = editor.value;
+        if (window.MathJax) {
+            MathJax.typesetPromise([preview]);
+        }
+    }
+    
+    // Run preview once on page load to show existing content
+    window.onload = updatePreview;
+</script>
+
+</body>
+</html>

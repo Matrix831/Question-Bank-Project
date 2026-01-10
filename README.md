@@ -37,7 +37,7 @@ Built with **Python Flask**, it features a robust LaTeX rendering engine powered
 ### 1. Installation
 Clone the repository to your local machine or Orange Pi:
 ```bash
-git clone [https://github.com/your-username/engineering-randomizer.git](https://github.com/your-username/engineering-randomizer.git)
+git clone [https://github.com/Matrix831/Question-Bank-Project](https://github.com/Matrix831/Question-Bank-Project)
 cd engineering-randomizer
 
 ```
@@ -90,8 +90,6 @@ To batch import questions from textbooks, use a `.csv` file with the following h
 ---
 
 *Developed for the love of Engineering and Open Source.*
-
-```
 
 ---
 

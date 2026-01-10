@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solving Mode</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: { enableMenu: false }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body { 
+            background: #050505; color: white; font-family: 'Segoe UI', sans-serif;
+            margin: 0; height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; overflow: hidden;
+        }
+        .main-content { text-align: center; width: 80%; max-width: 1000px; transition: 0.3s; }
+        
+        #q-text { font-size: 2.5rem; font-weight: 300; margin-bottom: 50px; color: #f0f0f0; line-height: 1.4; }
+        
+        #answer-box { display: none; background: #111; padding: 30px; border-radius: 12px; border: 1px solid #222; margin-top: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        #a-text { font-size: 2rem; color: #4caf50; margin: 0; font-weight: bold; }
+        #s-text { font-size: 1.2rem; color: #888; margin-top: 20px; border-top: 1px solid #333; padding-top: 15px; }
+
+        .btn-reveal { background: transparent; border: 1px solid #444; color: #666; padding: 15px 30px; cursor: pointer; border-radius: 8px; font-size: 14px; letter-spacing: 1px; }
+        .btn-reveal:hover { border-color: #007bff; color: white; }
+
+        .btn-next { 
+            position: absolute; bottom: 40px; right: 40px; 
+            background: #007bff; color: white; border: none; 
+            padding: 15px 45px; font-size: 1.1rem; border-radius: 50px; 
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,123,255,0.3); transition: 0.2s;
+        }
+        .btn-next:hover { background: #0056b3; transform: scale(1.05); }
+        .btn-exit { position: absolute; top: 30px; left: 30px; color: #444; text-decoration: none; font-size: 14px; }
+        .hint { position: absolute; bottom: 20px; width: 100%; text-align: center; color: #333; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <a href="/" class="btn-exit">[ESC] EXIT TO PORTAL</a>
+
+    <div class="main-content">
+        <div id="q-text">Preparing challenge...</div>
+        
+        <button id="show-btn" class="btn-reveal" onclick="showAnswer()">PRESS [SPACE] TO REVEAL ANSWER</button>
+        
+        <div id="answer-box">
+            <h2 id="a-text"></h2>
+            <div id="s-text"></div>
+        </div>
+    </div>
+
+    <button class="btn-next" onclick="loadNext()">NEXT [→]</button>
+    <div class="hint">Use Spacebar to reveal • Right Arrow for next</div>
+
+    <script>
+        const pathParts = window.location.pathname.split('/');
+        const sub = pathParts[2];
+        const topic = pathParts[3];
+
+        function loadNext() {
+            document.getElementById('answer-box').style.display = 'none';
+            document.getElementById('show-btn').style.display = 'inline-block';
+            document.getElementById('q-text').innerText = "Loading...";
+
+            fetch(`/get_question/${sub}/${topic}`)
+                .then(res => res.json())
+                .then(data => {
+                    if(data.error) {
+                        document.getElementById('q-text').innerText = data.error;
+                    } else {
+                        document.getElementById('q-text').innerHTML = data.question;
+                        document.getElementById('a-text').innerHTML = data.answer;
+                        document.getElementById('s-text').innerHTML = "<b>Step-by-Step:</b><br>" + data.solution;
+                        
+                        // RE-RENDER MATH SYMBOLS
+                        if (window.MathJax) {
+                            MathJax.typesetPromise();
+                        }
+                    }
+                });
+        }
+
+        function showAnswer() {
+            document.getElementById('answer-box').style.display = 'block';
+            document.getElementById('show-btn').style.display = 'none';
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        // KEYBOARD SHORTCUTS
+        document.addEventListener('keydown', (e) => {
+            if (e.code === "Space") {
+                e.preventDefault(); // Prevent page scrolling
+                showAnswer();
+            } else if (e.code === "ArrowRight") {
+                loadNext();
+            } else if (e.code === "Escape") {
+                window.location.href = "/";
+            }
+        });
+
+        loadNext();
+    </script>
+</body>
+</html>

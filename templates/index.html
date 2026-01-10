@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EE Study Portal - Launcher</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #e0e0e0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .launcher-card { background: #1a1a1a; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 400px; text-align: center; border: 1px solid #333; }
+        h1 { font-weight: 300; letter-spacing: 2px; color: #007bff; }
+        select { width: 100%; padding: 12px; margin: 10px 0; background: #252525; color: white; border: 1px solid #444; border-radius: 5px; cursor: pointer; }
+        button { width: 100%; padding: 15px; margin-top: 20px; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #0056b3; transform: translateY(-2px); }
+        .footer-link { margin-top: 25px; display: block; color: #666; text-decoration: none; font-size: 14px; }
+        .footer-link:hover { color: #888; }
+    </style>
+</head>
+<body>
+    <div class="launcher-card">
+        <h1>PORTAL</h1>
+        <p style="color: #888; font-size: 14px;">Select your focus area</p>
+        
+        <select id="subject-sel" onchange="updateSubtopics()">
+            <option value="">-- Select Subject --</option>
+            {% for s in subjects %}
+            <option value="{{ s }}">{{ s }}</option>
+            {% endfor %}
+        </select>
+
+        <select id="subtopic-sel">
+            <option value="">-- Select Subtopic --</option>
+        </select>
+
+        <button onclick="startSolving()">START SOLVING</button>
+        
+        <a href="/add" class="footer-link">+ Add New Question to Bank</a>
+    </div>
+
+    <script>
+        function updateSubtopics() {
+            const sub = document.getElementById('subject-sel').value;
+            const subtopicSel = document.getElementById('subtopic-sel');
+            if (!sub) return;
+            
+            fetch('/get_subtopics/' + sub)
+                .then(res => res.json())
+                .then(data => {
+                    subtopicSel.innerHTML = '<option value="">-- Select Subtopic --</option>';
+                    data.forEach(t => {
+                        subtopicSel.innerHTML += `<option value="${t}">${t}</option>`;
+                    });
+                });
+        }
+
+        function startSolving() {
+            const sub = document.getElementById('subject-sel').value;
+            const topic = document.getElementById('subtopic-sel').value;
+    
+            if(!sub || !topic) {
+                alert("Please select a Subject and Subtopic first!");
+                return;
+            }
+            window.location.href = `/study/${encodeURIComponent(sub)}/${encodeURIComponent(topic)}`;
+        }
+    </script>
+</body>
+</html>

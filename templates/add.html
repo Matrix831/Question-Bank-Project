@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Question | Engineering Portal</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --accent: #58a6ff;
+            --text: #c9d1d9;
+            --success: #238636;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border: 1px solid #30363d;
+        }
+
+        h2 { border-bottom: 1px solid #30363d; padding-bottom: 10px; color: var(--accent); font-weight: 300; }
+
+        .toolbar {
+            background: #0d1117;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+        }
+
+        .toolbar-group { margin-bottom: 15px; }
+        .group-label { font-size: 11px; color: #8b949e; text-transform: uppercase; margin-bottom: 8px; display: block; }
+
+        .t-btn {
+            background: #21262d;
+            color: var(--text);
+            border: 1px solid #30363d;
+            padding: 6px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .t-btn:hover { background: #30363d; border-color: var(--accent); color: var(--accent); }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: white;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        textarea:focus { border-color: var(--accent); outline: none; }
+
+        /* Preview Box */
+        .preview-box {
+            background: #050505;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px dashed #30363d;
+            min-height: 50px;
+        }
+
+        .save-btn {
+            background: var(--success);
+            color: white;
+            padding: 15px;
+            border: none;
+            width: 100%;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .save-btn:hover { opacity: 0.9; }
+
+        .row { display: flex; gap: 15px; }
+        .row input { flex: 1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add New Engineering Challenge</h2>
+    
+    <div class="toolbar">
+        <div class="toolbar-group">
+            <span class="group-label">Basic & Calculus</span>
+            <button class="t-btn" onclick="ins('\\frac{}{}')">Fraction</button>
+            <button class="t-btn" onclick="ins('^{}')">Exponent</button>
+            <button class="t-btn" onclick="ins('_{}')">Subscript</button>
+            <button class="t-btn" onclick="ins('\\sqrt{}')">Root</button>
+            <button class="t-btn" onclick="ins('\\int_{}^{}')">Integral</button>
+            <button class="t-btn" onclick="ins('\\frac{d}{dx}')">d/dx</button>
+            <button class="t-btn" onclick="ins('\\sum_{}^{}')">Summation</button>
+            <button class="t-btn" onclick="ins('\\infty')">∞</button>
+        </div>
+
+        <div class="toolbar-group">
+            <span class="group-label">EE Specific & Phasors</span>
+            <button class="t-btn" onclick="ins('\\angle')">∠ (Phasor)</button>
+            <button class="t-btn" onclick="ins('^\\circ')">° (Degree)</button>
+            <button class="t-btn" onclick="ins('\\mathcal{L}\\{ \\}')">Laplace</button>
+            <button class="t-btn" onclick="ins('\\Omega')">Ω (Ohm)</button>
+            <button class="t-btn" onclick="ins('\\mu')">μ (Micro)</button>
+            <button class="t-btn" onclick="ins('\\parallel')">|| (Parallel)</button>
+            <button class="t-btn" onclick="ins('\\text{Re}')">Real Part</button>
+            <button class="t-btn" onclick="ins('\\text{Im}')">Imag Part</button>
+            <button class="t-btn" onclick="ins('\\pi')">π</button>
+        </div>
+
+        <div class="toolbar-group">
+            <span class="group-label">Greek Letters</span>
+            <button class="t-btn" onclick="ins('\\tau')">τ</button>
+            <button class="t-btn" onclick="ins('\\theta')">θ</button>
+            <button class="t-btn" onclick="ins('\\phi')">φ</button>
+            <button class="t-btn" onclick="ins('\\omega')">ω</button>
+            <button class="t-btn" onclick="ins('\\Delta')">Δ</button>
+            <button class="t-btn" onclick="ins('\\alpha')">α</button>
+            <button class="t-btn" onclick="ins('\\beta')">β</button>
+            <button class="t-btn" onclick="ins('\\gamma')">γ</button>
+        </div>
+    </div>
+
+    <form action="/save" method="post">
+        <div class="row">
+            <input type="text" name="subject" placeholder="Subject (e.g., Electric Circuits 1)" required>
+            <input type="text" name="subtopic" placeholder="Subtopic (e.g., Phasor Analysis)" required>
+        </div>
+
+        <textarea id="editor" name="question" rows="4" placeholder="Type your question... Use $ for math symbols." oninput="updatePreview()"></textarea>
+        
+        <div class="group-label">Question Preview:</div>
+        <div id="preview" class="preview-box">Preview will appear here...</div>
+
+        <input type="text" name="answer" placeholder="Final Answer (e.g., $10\angle 30^\circ$ V)" required>
+        <textarea name="solution" rows="3" placeholder="Explain the steps..."></textarea>
+
+        <button type="submit" class="save-btn">SAVE TO BANK</button>
+    </form>
+    
+    <p style="text-align: center;"><a href="/" style="color: #666; font-size: 13px; text-decoration: none;">← Return to Portal</a></p>
+</div>
+
+<script>
+    const editor = document.getElementById('editor');
+    const preview = document.getElementById('preview');
+
+    function ins(code) {
+        const start = editor.selectionStart;
+        const end = editor.selectionEnd;
+        editor.value = editor.value.substring(0, start) + code + editor.value.substring(end);
+        editor.focus();
+        if(code.includes('{}')) editor.selectionEnd = start + code.indexOf('{') + 1;
+        updatePreview();
+    }
+
+    function updatePreview() {
+        preview.innerHTML = editor.value;
+        if (window.MathJax) {
+            MathJax.typesetPromise([preview]);
+        }
+    }
+</script>
+
+</body>
+</html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Solving Mode</title>
     <script>
         window.MathJax = {
@@ -40,9 +41,21 @@
         .btn-next:hover { background: #0056b3; transform: scale(1.05); }
         .btn-exit { position: absolute; top: 30px; left: 30px; color: #444; text-decoration: none; font-size: 14px; }
         .hint { position: absolute; bottom: 20px; width: 100%; text-align: center; color: #333; font-size: 12px; }
+        
+        .stats-bar {
+             position: absolute; top: 20px; right: 30px;
+             display: flex; gap: 20px; font-family: monospace;
+             color: #58a6ff; font-size: 1.2rem;
+        }
     </style>
 </head>
+
 <body>
+    <div class="stats-bar">
+        <div id="timer">00:00</div>
+        <div id="counter">Q #1</div>
+    </div>
+
     <a href="/" class="btn-exit">[ESC] EXIT TO PORTAL</a>
 
     <div class="main-content">
@@ -64,10 +77,27 @@
         const sub = pathParts[2];
         const topic = pathParts[3];
 
+        let seconds = 0;
+        let qCount = 0; // Set to 0 so the first loadNext() makes it #1
+
+        // Timer Logic
+        setInterval(() => {
+            seconds++;
+            let mins = Math.floor(seconds / 60);
+            let secs = seconds % 60;
+            document.getElementById('timer').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }, 1000);
+
         function loadNext() {
+            // Update UI State
             document.getElementById('answer-box').style.display = 'none';
             document.getElementById('show-btn').style.display = 'inline-block';
             document.getElementById('q-text').innerText = "Loading...";
+            
+            // Update Question Counter
+            qCount++;
+            document.getElementById('counter').innerText = `Q #${qCount}`;
 
             fetch(`/get_question/${sub}/${topic}`)
                 .then(res => res.json())
@@ -79,7 +109,6 @@
                         document.getElementById('a-text').innerHTML = data.answer;
                         document.getElementById('s-text').innerHTML = "<b>Step-by-Step:</b><br>" + data.solution;
                         
-                        // RE-RENDER MATH SYMBOLS
                         if (window.MathJax) {
                             MathJax.typesetPromise();
                         }
@@ -93,10 +122,9 @@
             if (window.MathJax) MathJax.typesetPromise();
         }
 
-        // KEYBOARD SHORTCUTS
         document.addEventListener('keydown', (e) => {
             if (e.code === "Space") {
-                e.preventDefault(); // Prevent page scrolling
+                e.preventDefault();
                 showAnswer();
             } else if (e.code === "ArrowRight") {
                 loadNext();

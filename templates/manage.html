@@ -2,111 +2,148 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Manage Question Bank</title>
-    <script>
-        window.MathJax = {
-            tex: { inlineMath: [['$', '$']], processEscapes: true }
-        };
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        :root {
-            --bg: #0d1117;
-            --card: #161b22;
-            --accent: #58a6ff;
-            --text: #c9d1d9;
-            --danger: #da3633;
-            --border: #30363d;
-        }
+        :root { --bg: #0d1117; --card: #161b22; --accent: #58a6ff; --text: #c9d1d9; --danger: #da3633; --border: #30363d; --warning: #f1c40f; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar Filter */
+        .sidebar { width: 260px; background: #010409; border-right: 1px solid var(--border); padding: 20px; overflow-y: auto; flex-shrink: 0; }
+        .sidebar h3 { font-size: 12px; color: var(--accent); text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
+        .filter-item { display: block; padding: 10px 15px; font-size: 14px; color: #8b949e; cursor: pointer; border-radius: 6px; margin-bottom: 5px; transition: 0.2s; }
+        .filter-item:hover, .filter-item.active { background: #161b22; color: white; }
 
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); padding: 40px; }
-        .container { max-width: 1200px; margin: auto; }
+        /* Main Content Area */
+        .main-content { flex: 1; display: flex; flex-direction: column; padding: 25px; overflow: hidden; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
         
-        h2 { color: var(--accent); font-weight: 300; }
-        
-        .controls { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
-        #search { padding: 10px; width: 300px; background: var(--card); border: 1px solid var(--border); color: white; border-radius: 6px; }
+        /* Tool Buttons Group */
+        .tool-group { display: flex; gap: 10px; }
+        .btn-tool { padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 13px; font-weight: 600; color: white; border: 1px solid var(--border); transition: 0.2s; }
+        .btn-backup { background: #21262d; border-color: var(--warning); color: var(--warning); }
+        .btn-backup:hover { background: var(--warning); color: black; }
+        .btn-template { background: #21262d; border-color: var(--accent); color: var(--accent); }
+        .btn-template:hover { background: var(--accent); color: white; }
 
-        table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background: #21262d; color: var(--accent); font-size: 12px; text-transform: uppercase; }
-        
-        .q-cell { max-width: 400px; font-size: 14px; }
-        .img-preview { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); }
-        
-        .action-btns { display: flex; gap: 10px; }
-        .btn { padding: 6px 12px; border-radius: 4px; border: none; cursor: pointer; text-decoration: none; font-size: 13px; color: white; transition: 0.2s; }
-        .btn-edit { background: #238636; }
-        .btn-delete { background: var(--danger); }
-        .btn:hover { opacity: 0.8; }
+        .table-container { flex: 1; overflow-y: auto; background: var(--card); border: 1px solid var(--border); border-radius: 8px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background: #21262d; position: sticky; top: 0; z-index: 10; color: var(--accent); text-transform: uppercase; font-size: 11px; }
 
-        .no-results { padding: 20px; text-align: center; color: #8b949e; }
+        .bulk-bar { background: #1c2128; padding: 12px 20px; border-radius: 8px; margin-bottom: 15px; display: none; align-items: center; gap: 15px; border: 1px solid var(--accent); }
+        .btn-danger { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="controls">
-        <h2>Question Inventory</h2>
-        <input type="text" id="search" placeholder="Search questions or topics..." onkeyup="filterTable()">
+<div class="sidebar">
+    <h3>Subject Filter</h3>
+    <div class="filter-item active" onclick="filterBySubject('all')">All Questions</div>
+    {% for subject in data.keys() %}
+        <div class="filter-item" onclick="filterBySubject('{{ subject }}')">{{ subject }}</div>
+    {% endfor %}
+</div>
+
+<div class="main-content">
+    <div class="header-top">
+        <h2 style="margin: 0; font-weight: 300;">Question Inventory</h2>
+        <div class="tool-group">
+            <a href="/download_db" class="btn-tool btn-backup">📥 BACKUP JSON</a>
+            <a href="/download_template" class="btn-tool btn-template">📋 CSV TEMPLATE</a>
+            <input type="text" id="search" placeholder="Search content..." onkeyup="runFilters()" style="padding: 8px; border-radius: 6px; background: #0d1117; color: white; border: 1px solid var(--border); width: 180px;">
+        </div>
     </div>
 
-    <table id="q-table">
-        <thead>
-            <tr>
-                <th>Subject & Topic</th>
-                <th>Image</th>
-                <th>Question Content</th>
-                <th>Answer</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for subject, topics in data.items() %}
-                {% for topic, questions in topics.items() %}
-                    {% for q in questions %}
-                    <tr>
-                        <td>
-                            <small style="color: var(--accent);">{{ subject }}</small><br>
-                            <b>{{ topic }}</b>
-                        </td>
-                        <td>
-                            {% if q.image %}
-                                <img src="/static/uploads/{{ q.image }}" class="img-preview">
-                            {% else %}
-                                <span style="color: #444;">No Img</span>
-                            {% endif %}
-                        </td>
-                        <td class="q-cell">{{ q.question }}</td>
-                        <td>{{ q.answer }}</td>
-                        <td class="action-btns">
-                            <a href="{{ url_for('edit_question', subject=subject, subtopic=topic, index=loop.index0) }}" class="btn btn-edit">Edit</a>
-                            
-                            <form action="{{ url_for('delete_question', subject=subject, subtopic=topic, index=loop.index0) }}" method="POST" onsubmit="return confirm('Delete this question permanently?')">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
+    <div id="bulk-bar" class="bulk-bar">
+        <span id="selected-count" style="font-size: 13px;">0 items selected</span>
+        <button class="btn-danger" onclick="deleteSelected()">DELETE SELECTED</button>
+        <button onclick="clearSelection()" style="background: transparent; color: #8b949e; border: none; cursor: pointer; font-size: 12px;">Cancel</button>
+    </div>
+
+    <div class="table-container">
+        <table id="q-table">
+            <thead>
+                <tr>
+                    <th width="40"><input type="checkbox" id="master-check" onclick="toggleAll(this)"></th>
+                    <th>Topic</th>
+                    <th>Question Preview</th>
+                    <th>Answer</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject, topics in data.items() %}
+                    {% for topic, questions in topics.items() %}
+                        {% for q in questions %}
+                        <tr class="q-row" data-subject="{{ subject }}">
+                            <td><input type="checkbox" class="q-check" data-id="{{ subject }}|{{ topic }}|{{ loop.index0 }}"></td>
+                            <td><small style="color: #8b949e;">{{ subject }}</small><br><b>{{ topic }}</b></td>
+                            <td style="max-width: 300px; color: #c9d1d9;">{{ q.question }}</td>
+                            <td style="color: var(--accent);">{{ q.answer }}</td>
+                            <td><a href="{{ url_for('edit_question', subject=subject, subtopic=topic, index=loop.index0) }}" style="color: #238636; text-decoration: none; font-size: 12px; font-weight: bold;">EDIT</a></td>
+                        </tr>
+                        {% endfor %}
                     {% endfor %}
                 {% endfor %}
-            {% endfor %}
-        </tbody>
-    </table>
-    
-    <p style="margin-top: 20px;"><a href="/" style="color: #666; text-decoration: none;">← Back to Portal</a></p>
+            </tbody>
+        </table>
+    </div>
+    <a href="/" style="margin-top: 15px; color: #666; font-size: 12px; text-decoration: none;">← Back to Portal</a>
 </div>
 
 <script>
-    function filterTable() {
-        let input = document.getElementById("search").value.toLowerCase();
-        let rows = document.querySelectorAll("#q-table tbody tr");
-        
-        rows.forEach(row => {
-            let text = row.innerText.toLowerCase();
-            row.style.display = text.includes(input) ? "" : "none";
+    let currentSubject = 'all';
+
+    function filterBySubject(sub) {
+        currentSubject = sub;
+        document.querySelectorAll('.filter-item').forEach(el => el.classList.remove('active'));
+        event.target.classList.add('active');
+        runFilters();
+    }
+
+    function runFilters() {
+        const search = document.getElementById('search').value.toLowerCase();
+        document.querySelectorAll('.q-row').forEach(row => {
+            const text = row.innerText.toLowerCase();
+            const sub = row.getAttribute('data-subject');
+            row.style.display = (text.includes(search) && (currentSubject === 'all' || sub === currentSubject)) ? "" : "none";
         });
     }
-</script>
 
+    function toggleAll(master) {
+        document.querySelectorAll('.q-check').forEach(cb => {
+            if (cb.closest('tr').style.display !== "none") cb.checked = master.checked;
+        });
+        updateBulkBar();
+    }
+
+    document.querySelectorAll('.q-check').forEach(cb => cb.addEventListener('change', updateBulkBar));
+
+    function updateBulkBar() {
+        const checked = document.querySelectorAll('.q-check:checked').length;
+        const bar = document.getElementById('bulk-bar');
+        document.getElementById('selected-count').innerText = `${checked} items selected`;
+        bar.style.display = checked > 0 ? "flex" : "none";
+    }
+
+    function deleteSelected() {
+        if (!confirm("Permanently delete selected items?")) return;
+        const selected = Array.from(document.querySelectorAll('.q-check:checked')).map(cb => cb.getAttribute('data-id'));
+        fetch('/bulk_delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ids: selected })
+        }).then(() => window.location.reload());
+    }
+
+    function clearSelection() {
+        document.querySelectorAll('.q-check').forEach(cb => cb.checked = false);
+        document.getElementById('master-check').checked = false;
+        updateBulkBar();
+    }
+</script>
 </body>
 </html>

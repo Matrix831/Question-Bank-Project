@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Add Question | Engineering Portal</title>
     <script>
         window.MathJax = {
@@ -46,7 +46,7 @@
         }
 
         h2 { border-bottom: 1px solid var(--border); padding-bottom: 10px; color: var(--accent); font-weight: 300; }
-        h3 { color: var(--accent); font-weight: 300; margin-top: 40px; border-top: 1px solid var(--border); pt: 20px; }
+        h3 { color: var(--accent); font-weight: 300; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 20px; }
 
         .toolbar {
             background: #0d1117;
@@ -113,6 +113,7 @@
         }
 
         .import-btn { background: #007bff; }
+        .template-btn { background: #6e7681; margin-bottom: 10px; text-decoration: none; display: inline-block; width: 100%; text-align: center; box-sizing: border-box; }
 
         .save-btn:hover { filter: brightness(1.2); }
 
@@ -195,9 +196,12 @@
 
     <h3>Batch Import Questions (CSV)</h3>
     <p style="font-size: 13px; color: #8b949e; margin-bottom: 20px;">
-        Use this to import hundreds of questions from your Siskind textbook. 
+        Use this to import hundreds of questions from your textbook. 
         Ensure your CSV has these headers: <b>subject, subtopic, question, answer, solution</b>.
     </p>
+    
+    <a href="/download_template" class="save-btn template-btn">📥 DOWNLOAD CSV TEMPLATE</a>
+
     <form action="/import_csv" method="post" enctype="multipart/form-data">
         <input type="file" name="csv_file" accept=".csv" required>
         <button type="submit" class="save-btn import-btn">IMPORT FROM CSV FILE</button>

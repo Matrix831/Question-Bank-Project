@@ -1,20 +1,248 @@
 {
-    "Mathematics": {
-        "Integrals": [
+    "Electrical Circuits 1": {
+        "Method of Analysis": [
             {
-                "question": "Solve $\\int \\cos(x) dx$",
-                "answer": "$\\sin(x) + C$",
-                "solution": "The derivative of $\\sin(x)$ is $\\cos(x)$.",
+                "question": "In a two-node circuit $V_1$ is connected to $10V$ via $2\\Omega$ and to ground via $4\\Omega$. Find $V_1$.",
+                "answer": "$6.67V$",
+                "solution": "KCL: $(10-V_1)/2 = V_1/4 \\Rightarrow 20 - 2V_1 = V_1 \\Rightarrow 3V_1 = 20 \\Rightarrow V_1 = 6.67V$.",
+                "image": null
+            },
+            {
+                "question": "A mesh has a $12V$ source and resistors $2\\Omega$ and $4\\Omega$. Find the mesh current $I_1$.",
+                "answer": "$2A$",
+                "solution": "KVL: $-12 + 2I_1 + 4I_1 = 0 \\Rightarrow 6I_1 = 12 \\Rightarrow I_1 = 2A$.",
+                "image": null
+            },
+            {
+                "question": "Find the voltage at a node where a $5A$ current source enters and is grounded by a $10\\Omega$ resistor.",
+                "answer": "$50V$",
+                "solution": "$V = IR = 5 \\times 10 = 50V$.",
+                "image": null
+            },
+            {
+                "question": "Two meshes share a $5\\Omega$ resistor. If $I_1 = 3A$ and $I_2 = 1A$ (same direction) find the voltage drop.",
+                "answer": "$20V$",
+                "solution": "$V = R(I_1 + I_2) = 5(3 + 1) = 20V$.",
+                "image": null
+            },
+            {
+                "question": "Calculate the power in a $10\\Omega$ resistor if the node voltages at its ends are $20V$ and $0V$.",
+                "answer": "$40W$",
+                "solution": "$P = V^2/R = 20^2 / 10 = 40W$.",
+                "image": null
+            },
+            {
+                "question": "A supernode connects $V_1$ and $V_2$ with a $5V$ source ($V_1$ at +). If $V_2 = 10V$ find $V_1$.",
+                "answer": "$15V$",
+                "solution": "$V_1 - V_2 = 5 \\Rightarrow V_1 - 10 = 5 \\Rightarrow V_1 = 15V$.",
+                "image": null
+            },
+            {
+                "question": "Find the current through a $2\\Omega$ resistor connected between node $V_a = 15V$ and $V_b = 5V$.",
+                "answer": "$5A$",
+                "solution": "$I = (15 - 5) / 2 = 5A$.",
+                "image": null
+            },
+            {
+                "question": "A mesh contains a $24V$ source and three $4\\Omega$ resistors in series. Find the current.",
+                "answer": "$2A$",
+                "solution": "$I = 24 / (4+4+4) = 2A$.",
+                "image": null
+            },
+            {
+                "question": "In nodal analysis node $V_1$ has $G_{11} = 0.5S$ and a $10A$ source enters. Find $V_1$.",
+                "answer": "$20V$",
+                "solution": "$0.5V_1 = 10 \\Rightarrow V_1 = 20V$.",
+                "image": null
+            },
+            {
+                "question": "Calculate the net current in a branch shared by $I_1 = 10A$ and $I_2 = 4A$ in opposite directions.",
+                "answer": "$6A$",
+                "solution": "$I_{net} = 10 - 4 = 6A$.",
+                "image": null
+            },
+            {
+                "question": "Find $V_x$ if node 1 is $12V$ and is connected to ground via $2\\Omega$ and $4\\Omega$ in series.",
+                "answer": "$8V$",
+                "solution": "Voltage divider: $V = 12 \\times (4 / (2+4)) = 12 \\times (4/6) = 8V$.",
+                "image": null
+            },
+            {
+                "question": "A $3A$ current source splits into two parallel $6\\Omega$ resistors. Find the current in one.",
+                "answer": "$1.5A$",
+                "solution": "Current divider: $3 \\times (6 / (6+6)) = 1.5A$.",
+                "image": null
+            },
+            {
+                "question": "Calculate the conductance of three $15\\Omega$ resistors in parallel.",
+                "answer": "$0.2S$",
+                "solution": "$G = 1/R_{eq} = 1/(15/3) = 1/5 = 0.2S$.",
+                "image": null
+            },
+            {
+                "question": "Find mesh current $I_2$ if Mesh 1 ($10V$) and Mesh 2 share $1\\Omega$ and Mesh 2 has $4\\Omega$ total resistance.",
+                "answer": "$2A$",
+                "solution": "Eq: $I_2 = (V_{shared}/R_{total})$. If $I_1$ is huge, $I_2$ depends on coupling. (Assume isolated loop for simplicity: $I = 10/5 = 2A$).",
+                "image": null
+            },
+            {
+                "question": "Determine node $V_1$ if two $10\\Omega$ resistors connect it to $20V$ and ground respectively.",
+                "answer": "$10V$",
+                "solution": "Voltage divider: $20 \\times",
                 "image": null
             }
-        ]
-    },
-    "Electrical Circuits 1": {
-        "Inductance & Electromagnetic Induction": [
+        ],
+        "First Order Circuit": [
             {
-                "question": "A 1,300-turn toroid has a cast-iron core whose average length and area are 22 in. and 0.75 in^{2}., respectively. If the current variation causes the permiability to vary between 230 and 600, calculate the inductance range of the toroid.",
-                "answer": "0.465 to 1.21 henry's",
-                "solution": "",
+                "question": "An RC circuit has $R = 1M\\Omega$ and $C = 1\\mu F$. Find the time constant $\\tau$.",
+                "answer": "$1s$",
+                "solution": "$\\tau = RC = (10^6)(10^{-6}) = 1s$.",
+                "image": null
+            },
+            {
+                "question": "A $10mH$ inductor is in series with a $5\\Omega$ resistor. Find the time constant $\\tau$.",
+                "answer": "$2ms$",
+                "solution": "$\\tau = L/R = 0.01 / 5 = 0.002s = 2ms$.",
+                "image": null
+            },
+            {
+                "question": "An RC circuit with $\\tau = 5ms$ is charged to $10V$. Find the voltage at $t = 5ms$ during discharge.",
+                "answer": "$3.68V$",
+                "solution": "$v(t) = 10e^{-5/5} = 10e^{-1} = 3.68V$.",
+                "image": null
+            },
+            {
+                "question": "How much energy is stored in a $2H$ inductor carrying $3A$ current?",
+                "answer": "$9J$",
+                "solution": "$W = 0.5 \\times L \\times I^2 = 0.5 \\times 2 \\times 3^2 = 9J$.",
+                "image": null
+            },
+            {
+                "question": "Find the steady-state current in an RL circuit with $V = 50V$ and $R = 10\\Omega$.",
+                "answer": "$5A$",
+                "solution": "$I = V/R = 50 / 10 = 5A$.",
+                "image": null
+            },
+            {
+                "question": "A $100\\mu F$ capacitor is charged to $20V$. Find the stored energy.",
+                "answer": "$20mJ$",
+                "solution": "$W = 0.5 \\times (100 \\times 10^{-6}) \\times 20^2 = 0.02J$.",
+                "image": null
+            },
+            {
+                "question": "An RL circuit has $\\tau = 0.1s$. If $R = 100\\Omega$ find $L$.",
+                "answer": "$10H$",
+                "solution": "$\\tau = L/R \\Rightarrow 0.1 = L/100 \\Rightarrow L = 10H$.",
+                "image": null
+            },
+            {
+                "question": "After how many time constants does a capacitor reach $95\\%$ of its final voltage?",
+                "answer": "$3\\tau$",
+                "solution": "$1 - e^{-3} \\approx 0.95$.",
+                "image": null
+            },
+            {
+                "question": "Find the voltage across a $10\\mu F$ capacitor if it holds $500\\mu C$ of charge.",
+                "answer": "$50V$",
+                "solution": "$V = Q/C = 500 \\times 10^{-6} / 10 \\times 10^{-6} = 50V$.",
+                "image": null
+            },
+            {
+                "question": "An RC circuit has $v(t) = 12(1 - e^{-2t})$. Find the time constant $\\tau$.",
+                "answer": "$0.5s$",
+                "solution": "The exponent is $-t/\\tau \\Rightarrow 1/\\tau = 2 \\Rightarrow \\tau = 0.5s$.",
+                "image": null
+            },
+            {
+                "question": "A $1H$ inductor has $v(t) = 10V$ at $t = 0$. Find $di/dt$ at that instant.",
+                "answer": "$10A/s$",
+                "solution": "$v = L(di/dt) \\Rightarrow 10 = 1(di/dt) \\Rightarrow di/dt = 10A/s$.",
+                "image": null
+            },
+            {
+                "question": "A $2F$ capacitor has $i(t) = 4A$. Find the rate of voltage change $dv/dt$.",
+                "answer": "$2V/s$",
+                "solution": "$i = C(dv/dt) \\Rightarrow 4 = 2(dv/dt) \\Rightarrow dv/dt = 2V/s$.",
+                "image": null
+            },
+            {
+                "question": "Find the current in a $500\\Omega$ resistor $2ms$ after a $10V$ step input in an RC circuit ($\\tau = 2ms$).",
+                "answer": "$7.36mA$",
+                "solution": "$i(t) = (V/R)e^{-t/\\tau} = (10/500)e^{-1} = 0.02 \\times 0.368 = 7.36mA$.",
+                "image": null
+            }
+        ],
+        "Second Order Circuit": [
+            {
+                "question": "Calculate $\\omega_0$ for a series RLC circuit with $L = 1H$ and $C = 1\\mu F$.",
+                "answer": "$1000$ rad/s",
+                "solution": "$\\omega_0 = 1/\\sqrt{LC} = 1/\\sqrt{10^{-6}} = 1000$ rad/s.",
+                "image": null
+            },
+            {
+                "question": "Find the Neper frequency $\\alpha$ for a series RLC with $R = 10\\Omega$ and $L = 2H$.",
+                "answer": "$2.5$ Np/s",
+                "solution": "$\\alpha = R/(2L) = 10 / (2 \\times 2) = 2.5$ Np/s.",
+                "image": null
+            },
+            {
+                "question": "A parallel RLC circuit has $R = 50\\Omega$ and $C = 10\\mu F$. Find $\\alpha$.",
+                "answer": "$1000$ Np/s",
+                "solution": "$\\alpha = 1/(2RC) = 1 / (2 \\times 50 \\times 10 \\times 10^{-6}) = 1000$ Np/s.",
+                "image": null
+            },
+            {
+                "question": "Identify the damping if $\\alpha = 500$ and $\\omega_0 = 500$.",
+                "answer": "Critically Damped",
+                "solution": "$\\alpha = \\omega_0 \\Rightarrow$ Critically Damped.",
+                "image": null
+            },
+            {
+                "question": "Identify the damping if $\\alpha = 100$ and $\\omega_0 = 200$.",
+                "answer": "Underdamped",
+                "solution": "$\\alpha < \\omega_0 \\Rightarrow$ Underdamped.",
+                "image": null
+            },
+            {
+                "question": "Identify the damping if $\\alpha = 300$ and $\\omega_0 = 100$.",
+                "answer": "Overdamped",
+                "solution": "$\\alpha > \\omega_0 \\Rightarrow$ Overdamped.",
+                "image": null
+            },
+            {
+                "question": "Find the damped natural frequency $\\omega_d$ if $\\omega_0 = 50$ and $\\alpha = 30$.",
+                "answer": "$40$ rad/s",
+                "solution": "$\\omega_d = \\sqrt{50^2 - 30^2} = \\sqrt{2500 - 900} = 40$ rad/s.",
+                "image": null
+            },
+            {
+                "question": "Find the bandwidth $B$ of a series RLC circuit where $R = 10\\Omega$ and $L = 50mH$.",
+                "answer": "$200$ rad/s",
+                "solution": "$B = R/L = 10 / 0.05 = 200$ rad/s.",
+                "image": null
+            },
+            {
+                "question": "Calculate the quality factor $Q$ if $\\omega_0 = 1000$ and $B = 100$.",
+                "answer": "$10$",
+                "solution": "$Q = \\omega_0 / B = 1000 / 100 = 10$.",
+                "image": null
+            },
+            {
+                "question": "In a series RLC circuit $L = 100mH$ and $C = 10\\mu F$. Find the resonant frequency $f_0$.",
+                "answer": "$159.15Hz$",
+                "solution": "$\\omega_0 = 1/\\sqrt{0.1 \\times 10^{-5}} = 1000$. $f_0 = 1000 / (2\\pi) = 159.15Hz$.",
+                "image": null
+            },
+            {
+                "question": "Find the roots $s_1",
+                "answer": " s_2$ if $\\alpha = 5$ and $\\omega_0 = 4$.",
+                "solution": "$-2",
+                "image": null
+            },
+            {
+                "question": "Find the damping ratio $\\zeta$ if $\\alpha = 10$ and $\\omega_0 = 20$.",
+                "answer": "$0.5$",
+                "solution": "$\\zeta = \\alpha / \\omega_0 = 10 / 20 = 0.5$.",
                 "image": null
             }
         ]

@@ -1,17 +1,25 @@
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
 import json
 import random
 import os
 import urllib.parse
 import csv 
+import io
 
 app = Flask(__name__)
-DB_FILE = 'questions.json'
-UPLOAD_FOLDER = 'static/uploads'
+
+# 1. Define the BASE_DIR and DB_FILE first using absolute paths
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_FILE = os.path.join(BASE_DIR, 'questions.json')
+
+# 2. Define the UPLOAD_FOLDER
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+# 3. Create the upload folder and print the database path
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+print(f"🚀 YOUR DATABASE IS ACTUALLY HERE: {DB_FILE}")
 
 def load_db():
     if not os.path.exists(DB_FILE):
@@ -36,6 +44,11 @@ def manage_page():
     data = load_db()
     return render_template('manage.html', data=data)
 
+@app.route('/download_db')
+def download_db():
+    """Allows downloading the JSON file directly from the browser"""
+    return send_file(DB_FILE, as_attachment=True)
+
 @app.route('/delete/<subject>/<subtopic>/<int:index>', methods=['POST'])
 def delete_question(subject, subtopic, index):
     data = load_db()
@@ -43,20 +56,16 @@ def delete_question(subject, subtopic, index):
     topic_decoded = urllib.parse.unquote(subtopic)
     
     if sub_decoded in data and topic_decoded in data[sub_decoded]:
-        # Remove the question at the specific index
         deleted_q = data[sub_decoded][topic_decoded].pop(index)
         
-        # Clean up the image file if it exists
         if deleted_q.get('image'):
             img_path = os.path.join(app.config['UPLOAD_FOLDER'], deleted_q['image'])
             if os.path.exists(img_path):
                 os.remove(img_path)
         
-        # If subtopic is empty, remove it
         if not data[sub_decoded][topic_decoded]:
             del data[sub_decoded][topic_decoded]
             
-        # If subject is empty, remove it
         if not data[sub_decoded]:
             del data[sub_decoded]
             
@@ -70,21 +79,19 @@ def edit_question(subject, subtopic, index):
     topic_decoded = urllib.parse.unquote(subtopic)
     
     if request.method == 'POST':
-        # Update the question with form data
         data[sub_decoded][topic_decoded][index] = {
             "question": request.form['question'],
             "answer": request.form['answer'],
             "solution": request.form['solution'],
-            "image": data[sub_decoded][topic_decoded][index].get('image') # Keep existing image
+            "image": data[sub_decoded][topic_decoded][index].get('image')
         }
         save_db(data)
         return redirect(url_for('manage_page'))
     
-    # GET request: Show the edit form with current data
     question_data = data[sub_decoded][topic_decoded][index]
     return render_template('edit.html', q=question_data, sub=sub_decoded, topic=topic_decoded, idx=index)
 
-# --- EXISTING ROUTES ---
+# --- QUESTION & STUDY ROUTES ---
 
 @app.route('/get_subtopics/<subject>')
 def get_subtopics(subject):
@@ -154,6 +161,58 @@ def import_csv():
 @app.route('/study/<subject>/<subtopic>')
 def study_page(subject, subtopic):
     return render_template('study.html', subject=subject, subtopic=subtopic)
+
+# --- EXAM ROUTES ---
+
+@app.route('/generate_exam')
+def generate_exam_page():
+    data = load_db()
+    return render_template('generate_exam.html', subjects=data.keys())
+
+@app.route('/mock_exam_custom/<subject>/<subtopics_json>/<int:count>')
+def mock_exam_custom(subject, subtopics_json, count):
+    data = load_db()
+    subject_decoded = urllib.parse.unquote(subject)
+    subtopics_list = json.loads(urllib.parse.unquote(subtopics_json))
+    
+    all_qs = []
+    subject_data = data.get(subject_decoded, {})
+    for topic in subtopics_list:
+        if topic in subject_data:
+            all_qs.extend(subject_data[topic])
+    
+    if not all_qs: return "No questions found!", 404
+    
+    exam_qs = random.sample(all_qs, min(len(all_qs), count))
+    return render_template('exam_print.html', questions=exam_qs, subject=subject_decoded)
+
+@app.route('/bulk_delete', methods=['POST'])
+def bulk_delete():
+    target_ids = request.json.get('ids', [])
+    data = load_db()
+    target_ids.sort(key=lambda x: int(x.split('|')[2]), reverse=True)
+    
+    for item in target_ids:
+        sub, topic, idx = item.split('|')
+        idx = int(idx)
+        if sub in data and topic in data[sub]:
+            data[sub][topic].pop(idx)
+            if not data[sub][topic]: del data[sub][topic]
+            if not data[sub]: del data[sub]
+            
+    save_db(data)
+    return jsonify({"status": "success"})
+
+@app.route('/download_template')
+def download_template():
+    headers = "subject,subtopic,question,answer,solution\n"
+    proxy = io.StringIO()
+    proxy.write(headers)
+    mem = io.BytesIO()
+    mem.write(proxy.getvalue().encode('utf-8'))
+    mem.seek(0)
+    proxy.close()
+    return send_file(mem, mimetype='text/csv', as_attachment=True, download_name='ee_portal_template.csv')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

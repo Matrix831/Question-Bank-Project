@@ -78,10 +78,15 @@ To batch import questions from textbooks, use a `.csv` file with the following h
 
 ## 🗺️ Roadmap
 
-* [ ] Add Image-to-Text (OCR) for faster question entry.
-* [ ] Implement a pomodoro timer in Study Mode.
-* [ ] Create a "Mock Exam" PDF generator.
-* [ ] Mobile App wrapper for Android.
+* [x] Implement a pomodoro timer in Study Mode.
+* [x] Create a "Mock Exam" PDF generator.
+* [x] Absolute Path Data Integrity
+* [x] Dedicated Multi-Subtopic Exam Generator
+* [x] Mobile-friendly Checkbox UI
+* [x] One-click Database Backup
+* [ ] Next: Solution Masking toggle for Study Mode
+* [ ] Next: Android Studio WebView (.apk) build
+* [ ] Future: Image-to-Text (OCR) for textbook scanning
 
 ## 👤 Author
 

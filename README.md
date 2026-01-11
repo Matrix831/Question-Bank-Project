@@ -38,7 +38,7 @@ Built with **Python Flask**, it features a robust LaTeX rendering engine powered
 Clone the repository to your local machine or Orange Pi:
 ```bash
 git clone [https://github.com/Matrix831/Question-Bank-Project](https://github.com/Matrix831/Question-Bank-Project)
-cd engineering-randomizer
+cd Question-Bank-Project
 
 ```
 
